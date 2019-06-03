@@ -11,8 +11,8 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
         super(engine, state);
 
         this.uniqueId = 'com.jfez.newsfeed';
-        this.name = 'Personalized Newsfeed';
-        this.description = 'A summarized personal newsfeed for you!';
+        this.name = 'Newsfeed Summaries';
+        this.description = 'A summarized newsfeed for you!';
     }
 
     splitMultiString(string) {
