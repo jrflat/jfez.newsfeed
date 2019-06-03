@@ -1,6 +1,6 @@
 const Tp = require('thingpedia');
 const FeedParser = require('feedparser');
-const Http = require('./http');
+const Http = require('thingpedia-api/lib/helpers/http');
 
 const rss_urls = {nyt : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
                   cnn : 'http://rss.cnn.com/rss/cnn_topstories.rss',
