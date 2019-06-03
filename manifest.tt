@@ -1,0 +1,17 @@
+class @jfez.newsfeed {
+  import loader from @org.thingpedia.v2();
+  import config from @org.thingpedia.config.none();
+
+  monitorable list query get_news(in req sources: String #_[prompt="List the news sources you want, separated by comma."],
+    					out title: String,
+                                        out link: Entity(tt:url),
+                                        out updated: Date,
+                                        out description: String)
+    
+  #_[canonical="get news articles from requested sources"]
+  #_[confirmation="get news articles from $sources"]
+  #_[formatted=[{type="rdl",webCallback="${link}",displayTitle="${title}",displayText="${description}"}]]
+  #[poll_interval=60min]
+  #[doc="get news articles"];
+    
+}
