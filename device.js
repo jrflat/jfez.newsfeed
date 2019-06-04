@@ -1,3 +1,5 @@
+"use strict";
+
 const Tp = require('thingpedia');
 
 const rss_urls = {nyt : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
