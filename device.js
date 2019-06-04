@@ -43,7 +43,7 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
         console.log('urls are ' + JSON.stringify(urls));
         let news = [];
         for (let i = 0; i < urls.length; i++) {
-            let curr = Tp.Helpers.Rss.get(urls[i]).slice(0, 3);
+            let curr = (Tp.Helpers.Rss.get(urls[i])).slice(0, 3);
             console.log('curr array: ' + JSON.stringify(curr));
             news.push(curr);
             console.log('news array to return: ' + JSON.stringify(news));
