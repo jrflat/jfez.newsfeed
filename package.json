@@ -1,8 +1,8 @@
 {
-  "name": "com.jfez.newsfeed",
+  "name": "jfez.newsfeed",
   "version": "1.0.0",
   "description": "newsfeed device",
-  "main": "index.js",
+  "main": "device.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
