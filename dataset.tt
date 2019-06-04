@@ -1,4 +1,15 @@
 dataset @jfez.newsfeed language "en" {
+
+    query (p_sources :String)  := @jfez.newsfeed.get_news(sources=p_sources)
+    #_[utterances=["get news summaries from ${p_sources}","show me news summaries from ${p_sources}","news summaries from ${p_sources}","show me ${p_sources} news summaries"]]
+    #[id=27720654];
+
+    stream (p_sources :String)  := monitor (@jfez.newsfeed.get_news(sources=p_sources))
+    #_[utterances=["when ${p_sources} publishes a new article"]]
+    #[id=27720658];
+    
+    
+    /*
     query (source :String)  := @jfez.newsfeed.get_news(sources=[source])
     #_[utterances=["get news summaries from ${source}","show me news summaries from ${source}","show me ${source} news summaries"]]
     #[id=27565816];
@@ -18,5 +29,5 @@ dataset @jfez.newsfeed language "en" {
     query (source1 :String, source2 :String, source3 :String)  := @jfez.newsfeed.get_news(sources=[source1, source2, source3])
     #_[utterances=["get news summaries from ${source1}, ${source2} and ${source3}","show me news summaries from ${source1}, ${source2} and ${source3}","show me ${source1}, ${source2} and ${source3} news summaries"]]
     #[id=35528960];
-
+    */
 }
