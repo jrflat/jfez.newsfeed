@@ -2,9 +2,9 @@
 
 const Tp = require('thingpedia');
 
-const rss_urls = {nyt : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
-                  cnn : 'http://rss.cnn.com/rss/cnn_topstories.rss',
-                  bbc : 'http://feeds.bbci.co.uk/news/rss.xml'};
+const rss_urls = {'nyt' : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+                  'cnn' : 'http://rss.cnn.com/rss/cnn_topstories.rss',
+                  'bbc' : 'http://feeds.bbci.co.uk/news/rss.xml'};
 
 module.exports = class newsfeedDevice extends Tp.BaseDevice {
     constructor(engine, state) {
@@ -24,14 +24,14 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
         return sources;
     }
 
-    sourcesToURLs(sources) {
-        if (sources.length == 0) // use New York Times as default
-            return {rss_urls.nyt};
+    sourcesToURLs(sourceList) {
+        if (sourceList.length == 0) // use New York Times as default
+            return [rss_urls['nyt']];
         let urls = [];
-        for (let i = 0; i < sources.length; i++) {
-            if (!rss_urls.hasOwnProperty(sources[i]))
-                throw new Error(`News source ${sources[i]} not recognized. Please try again.`);
-            urls.push(sources[i]);
+        for (let i = 0; i < sourceList.length; i++) {
+            if (!rss_urls.hasOwnProperty(sourceList[i]))
+                throw new Error(`News source ${sourceList[i]} not recognized. Please try again.`);
+            urls.push(rss_urls[sourceList[i]]);
         }
         return urls;   
     }
@@ -41,9 +41,8 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
         console.log('News sources to pull from are ' + JSON.stringify(sourceList));
         let urls = this.sourcesToURLs(sourceList);
         console.log('urls are ' + JSON.stringify(urls));
-        let numSources = urls.length;
-        news = [];
-        for (let i = 0; i < numSources; i++) {
+        let news = [];
+        for (let i = 0; i < urls.length; i++) {
             news.push(Tp.Helpers.Rss.get(urls[i]));
         }
         return news;
