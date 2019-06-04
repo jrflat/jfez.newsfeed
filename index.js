@@ -8,7 +8,7 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
     constructor(engine, state) {
         super(engine, state);
 
-        this.uniqueId = 'com.jfez.newsfeed';
+        this.uniqueId = 'jfez.newsfeed';
         this.name = 'Newsfeed Summaries';
         this.description = 'A summarized newsfeed for you!';
     }
