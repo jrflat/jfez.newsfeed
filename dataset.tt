@@ -1,0 +1,22 @@
+dataset @jfez.newsfeed language "en" {
+    query (source :String)  := @jfez.newsfeed.get_news(sources=[source])
+    #_[utterances=["get news summaries from ${source}","show me news summaries from ${source}","show me ${source} news summaries"]]
+    #[id=27565816];
+
+    query (source :String)  := (@jfez.newsfeed.get_news(sources=[source])), updated >= start_of(day)
+    #_[utterances=["today's news summaries from ${source}", "news summaries today from ${source}", "summaries of today's news from ${source}"]]
+    #[id=27565819];
+
+    stream (source :String)  := monitor (@jfez.newsfeed.get_news(sources=[source]))
+    #_[utterances=["when ${source} publishes a new article"]]
+    #[id=27565820];
+
+    query (source1 :String, source2 :String)  := @jfez.newsfeed.get_news(sources=[source1, source2])
+    #_[utterances=["get news summaries from ${source1} and ${source2}","show me news summaries from ${source1} and ${source2}","show me ${source1} and ${source2} news summaries"]]
+    #[id=35528955];
+
+    query (source1 :String, source2 :String, source3 :String)  := @jfez.newsfeed.get_news(sources=[source1, source2, source3])
+    #_[utterances=["get news summaries from ${source1}, ${source2} and ${source3}","show me news summaries from ${source1}, ${source2} and ${source3}","show me ${source1}, ${source2} and ${source3} news summaries"]]
+    #[id=35528960];
+
+}
