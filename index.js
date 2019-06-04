@@ -1,6 +1,4 @@
 const Tp = require('thingpedia');
-const FeedParser = require('feedparser');
-const Http = require('thingpedia-api/lib/helpers/http');
 
 const rss_urls = {nyt : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
                   cnn : 'http://rss.cnn.com/rss/cnn_topstories.rss',
@@ -44,29 +42,7 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
         let numSources = urls.length;
         news = [];
         for (let i = 0; i < numSources; i++) {
-            news.push(Http.getStream(urls[i], null).then((stream) => {
-                return new Promise((resolve, reject) => {
-                    const parser = new FeedParser({ feedurl: urls[i] });
-                    parser.on('error', reject);
-
-                    const toEmit = [];
-                    parser.on('data', (entry) => {
-                        toEmit.push({
-                            guid: entry.guid,
-                            title: entry.title,
-                            description: entry.description,
-                            link: entry.link,
-                            updated_time: new Date(entry.date),
-                            categories: entry.categories
-                        });
-                    });
-                    parser.on('end', () => resolve(toEmit));
-                    stream.pipe(parser);
-                });
-            }).then((toEmit) => {
-                toEmit.sort((a, b) => (+b.updated_time) - (+a.updated_time));
-                return toEmit;
-            });)
+            news.push(Tp.Helpers.Rss.get(urls[i]));
         }
         return news;
     }
