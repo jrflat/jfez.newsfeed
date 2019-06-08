@@ -2,7 +2,7 @@
 
 const Tp = require('thingpedia');
 var FeedParser = require('feedparser');
-var fs = require('fs');
+var request = require('request');
 
 const rss_urls = {'nyt' : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
 		  'nytimes' : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
@@ -62,27 +62,34 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
 		console.log('urls are ' + JSON.stringify(urls));
 		var articles = [];
 		for (let i = 0; i < urls.length; i++) {			
-			fs.createReadStream(urls[i])
-				.on('error', function (error) {
-					console.error(error);
-				})
-				.pipe(new FeedParser())
-				.on('error', function (error) {
-					console.error(error);
-				})
-				.on('meta', function (meta) {
-					console.log('Meta: %s', meta.title);
-				})
-				.on('readable', function() {
-					var stream = this;
-					var item;
-					for (let i = 0; i < 5; i++) {
-						item = stream.read()
-						if (item == null) { break; }
-						console.log('Got article: %s', item.title);
-						articles.push(item);
-					}
-				});
+			var req = request(urls[i], {timeout: 10000, pool: false});
+			req.setMaxListeners(50);
+			req.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36');
+			req.setHeader('accept', 'text/html,application/xhtml+xml');
+			
+			var feedparser = new FeedParser()
+			
+			req.on('error', function (error) {
+				console.log('Request error: ' + error);
+			});
+			req.on('response', function (res) {
+				if (res.statusCode != 200) {
+					return this.emit('error', new Error('Bad status code'));
+				}
+				res.pipe(feedparser);
+			});
+			
+			feedparser.on('error', function (error) {
+				console.log('Feedparser error: ' + error);
+			});
+			
+			feedparser.on('readable', function() {
+				var post;
+				while (post = this.read()) {
+					console.log(post);
+					articles.push(post);
+				}
+			});
 		}
 		return articles;
 	}
