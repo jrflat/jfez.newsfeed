@@ -1,6 +1,8 @@
 "use strict";
 
 const Tp = require('thingpedia');
+var FeedParser = require('feedparser');
+var request = require('request');
 
 const rss_urls = {'nyt' : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
 		  'nytimes' : 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
@@ -44,6 +46,8 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
     }
 
     sourcesToURLs(sourceList) {
+        if (sourceList.length == 0) // use New York Times as default
+            return [rss_urls['nyt']];
         let urls = [];
         for (let i = 0; i < sourceList.length; i++) {
             if (!rss_urls.hasOwnProperty(sourceList[i]))
@@ -58,13 +62,40 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
         console.log('News sources to pull from are ' + JSON.stringify(sourceList));
         let urls = this.sourcesToURLs(sourceList);
         console.log('urls are ' + JSON.stringify(urls));
-        var news = [];
+        var articles = [];
+	var feedparser = new FeedParser();
         for (let i = 0; i < urls.length; i++) {
-	    /* Issue here: Not sure how to combine multiple RSS helper calls for one return.
-	    Tried: .push(), .concat(), .push.apply() */
-            news.push.apply(news, Tp.Helpers.Rss.get(urls[i]));
-            console.log('news array to return: ' + JSON.stringify(news));
+	    var req = request(urls[i]);
+	    req.on('error', function (error) {
+		console.log('Request error: ' + JSON.stringify(error));
+	    });
+
+	    req.on('response', function (res) {
+		var stream = this;
+
+		if (res.statusCode !== 200) {
+		    this.emit('error', new Error('Bad status code'));
+		} else {
+		    stream.pipe(feedparser);
+		}
+	    });
+
+	    feedparser.on('error', function (error) {
+		console.log('Feedparser error: ' + JSON.stringify(error));
+	    });
+
+	    feedparser.on('readable', function () {
+		var stream = this;
+		var meta = this.meta;
+		var item;
+
+		for (let i = 0; i < 5; i++) {
+		    item = stream.read();
+		    if (item == null) { break; }
+		    articles.push(item);
+		}
+	    });
         }
-        return news;
+        return articles;
     }
 }
