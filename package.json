@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/jrflat/com.jfez.newsfeed#readme",
   "dependencies": {
-    "feedparser": "^2.2.9"
+    "feedparser": "^2.2.9",
+    "request": "^2.88.0"
   }
 }
