@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/jrflat/com.jfez.newsfeed/issues"
   },
-  "homepage": "https://github.com/jrflat/com.jfez.newsfeed#readme"
+  "homepage": "https://github.com/jrflat/com.jfez.newsfeed#readme",
+  "dependencies": {
+    "feedparser": "^2.2.9"
+  }
 }
