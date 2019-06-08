@@ -6,22 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jrflat/com.jfez.newsfeed.git"
-  },
+  "repository": "git+https://github.com/jrflat/com.jfez.newsfeed.git",
   "keywords": [
     "news"
   ],
   "author": "Jonathan Flat",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jrflat/com.jfez.newsfeed/issues"
+    "url": "https://github.com/jrflat/jfez.newsfeed/issues"
   },
-  "homepage": "https://github.com/jrflat/com.jfez.newsfeed#readme",
+  "homepage": "https://github.com/jrflat/jfez.newsfeed#readme",
   "dependencies": {
     "feedparser": "^2.2.9",
-    "fs": "^0.0.1-security",
     "request": "^2.88.0"
   }
 }
