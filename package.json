@@ -21,6 +21,7 @@
   "homepage": "https://github.com/jrflat/com.jfez.newsfeed#readme",
   "dependencies": {
     "feedparser": "^2.2.9",
+    "fs": "^0.0.1-security",
     "request": "^2.88.0"
   }
 }
