@@ -83,14 +83,25 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
 				console.log('Feedparser error: ' + error);
 			});
 			
+			feedparser.on('end', function () {
+				console.log('Feedparser end');
+			});
+			
 			feedparser.on('readable', function() {
 				var post;
-				while (post = this.read()) {
-					console.log(post);
+				for (let i = 0; i < 5; i++) {
+					post = this.read();
+					if (post == null) { break; }
+					console.log('Title: ' + post.title);
+					console.log('Description: ' + post.description);
+					console.log(i);
 					articles.push(post);
+					console.log(articles.length);
 				}
+				console.log('Feedparser readable finished');
 			});
 		}
+		console.log(articles.length);
 		return articles;
 	}
 }
