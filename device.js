@@ -72,6 +72,7 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
 			req.on('error', function (error) {
 				console.log('Request error: ' + error);
 			});
+			
 			req.on('response', function (res) {
 				if (res.statusCode != 200) {
 					return this.emit('error', new Error('Bad status code'));
@@ -89,19 +90,15 @@ module.exports = class newsfeedDevice extends Tp.BaseDevice {
 			
 			feedparser.on('readable', function() {
 				var post;
-				for (let i = 0; i < 5; i++) {
-					post = this.read();
-					if (post == null) { break; }
+				while (post = this.read()) {
 					console.log('Title: ' + post.title);
 					console.log('Description: ' + post.description);
-					console.log(i);
 					articles.push(post);
 					console.log(articles.length);
 				}
-				console.log('Feedparser readable finished');
 			});
 		}
-		console.log(articles.length);
+		console.log('About to return articles array of length: ' + articles.length);
 		return articles;
 	}
 }
